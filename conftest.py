@@ -1,5 +1,6 @@
 import pytest
-from django.contrib.auth.models import User
+from pytest_factoryboy import register
+from app1.tests.factories import UserFactory, ProductFactory, CategoryFactory
 
 ''' Intro to Factories '''
 
@@ -38,3 +39,23 @@ def new_user_factory(db):
 @pytest.fixture
 def new_user(db, new_user_factory):
     return new_user_factory('test_user', 'test', )
+
+
+
+@pytest.fixture
+def create_superuser(db, new_user_factory):
+    return new_user_factory('test_superuser', 'test', is_staff=True, is_superuser=True)
+
+
+
+''' factoryboy conf '''
+
+register(UserFactory)
+register(CategoryFactory)
+register(ProductFactory)
+
+@pytest.fixture
+def new_user(db, user_factory):
+    user = user_factory(is_staff = True)
+    return user
+
